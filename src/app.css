@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.card-details {
+  padding: 0 2rem;
+  position: absolute;
+  bottom: 430px;
+  left: 120px;
+  height: 250px;
+}
+
+.label {
+  margin-bottom: 10px;
+}
+.input {
+  margin-bottom: 20px;
+  padding: 20px;
+  padding-left: 10px;
+  width: 400px;
+  border-width: 2px;
+}
+body {
+  background-color: rgba(224, 220, 220, 0.2);
+  font-family: "Space Grotesk", sans-serif;
+}
+.other-details {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.other-details input {
+  padding-left: 10px;
+}
+.input:focus,
+.other-details:focus {
+
+  border: 2px solid #220930;
+}
