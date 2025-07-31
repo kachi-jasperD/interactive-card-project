@@ -6,32 +6,38 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const CardDetailsPage = () => {
+const cardDetailsSchema = z.object({
+  names: z.string().max(40, "Can't be blank"),
+  numbers: z.string().min(16, "Wrong format, numbers only"),
+  month: z.string().min(2, "Can't be blank"),
+  year: z.string().min(2),
+  cvc: z.string().min(2, "Can't be blank"),
+});
+
+const CardDetailsPageWithZod = () => {
   const {
     register,
-    watch,
+    // watch,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm();
+    // getValues,
+  } = useForm({
+    resolver: zodResolver(cardDetailsSchema),
+  });
 
-  const cardYear = watch("year", "");
-  const cardMonth = watch("month", "");
-  const cardCvc = watch("cvc", "");
-  const cardHolderName = watch("name", "");
-  const cardNumber = watch("numbers", "");
+  // const cardYear = watch("year", "");
+  // const cardMonth = watch("month", "");
+  // const cardCvc = watch("cvc", "");
+  // const cardHolderName = watch("name", "");
+  // const cardNumber = watch("numbers", "");
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
-    // POST METHOD/ENDPOINT
-    fetch("http://localhost:8000/cards", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).then(() => {
-      console.log("New card added");
-    });
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
 
     reset();
   };
@@ -53,35 +59,21 @@ const CardDetailsPage = () => {
           <form onSubmit={handleSubmit(onSubmit)} action="" method="">
             <Label className="label">CARDHOLDER NAME</Label>
             <Input
-              {...register("name", {
-                required: "Can't be blank",
-                maxLength: {
-                  value: 40,
-                  message: "Can't be more than 40",
-                },
-              })}
+              {...register("names")}
               type="text"
               placeholder="e.g Jane Appleseed"
               className="input"
-              maxLength={40}
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs">{`${errors.name.message}`}</p>
+            {errors.names && (
+              <p className="text-red-500 text-xs">{`${errors.names.message}`}</p>
             )}
 
             <Label className="label">CARD NUMBER</Label>
             <Input
-              {...register("numbers", {
-                required: "Wrong format, numbers only",
-                maxLength: {
-                  value: 16,
-                  message: "Can't be more than 16",
-                },
-              })}
+              {...register("numbers")}
               type="text"
               placeholder="e.g 1234 5678 9123 0000"
               className="input"
-              maxLength={16}
             />
             {errors.numbers && (
               <p className="text-red-500 text-xs">{`${errors.numbers.message}`}</p>
@@ -91,18 +83,14 @@ const CardDetailsPage = () => {
                 <Label className="label">EXP. DATE (MM/YY)</Label>
                 <div className="date flex gap-4">
                   <Input
-                    {...register("month", {
-                      required: "Can't be blank",
-                    })}
+                    {...register("month")}
                     type="text"
                     placeholder="MM"
                     className="h-11 w-28"
                     maxLength={2}
                   />
                   <Input
-                    {...register("year", {
-                      required: "Can't be blank",
-                    })}
+                    {...register("year")}
                     type="text"
                     placeholder="YY"
                     className="h-11 w-28"
@@ -116,9 +104,7 @@ const CardDetailsPage = () => {
               <div className="cvc">
                 <Label className="label">CVC</Label>
                 <Input
-                  {...register("cvc", {
-                    required: "Can't be blank",
-                  })}
+                  {...register("cvc")}
                   type="text"
                   placeholder="e.g 123"
                   className="h-11 w-30"
@@ -152,24 +138,24 @@ const CardDetailsPage = () => {
             </div>
             <div className="flex flex-col gap-5">
               <p className="text-[1.75rem] tracking-[2px]">
-                {cardNumber && cardNumber.trim()
+                {/* {cardNumber && cardNumber.trim()
                   ? cardNumber
                       .trim()
                       .match(/.{1,4}/g)
                       ?.join(" ")
-                  : "0000 0000 0000 0000"}
+                  : "0000 0000 0000 0000"} */}
               </p>
 
               <div className="flex justify-between text-xs font-bold w-[380px]">
                 <p>
-                  {cardHolderName && cardHolderName.trim()
+                  {/* {cardHolderName && cardHolderName.trim()
                     ? cardHolderName.toUpperCase()
-                    : "JANE APPLESEED"}
+                    : "JANE APPLESEED"} */}
                 </p>
 
                 <p>
-                  {cardMonth && cardMonth.trim() ? cardMonth : "00"}/
-                  {cardYear && cardYear.trim() ? cardYear : "00"}
+                  {/* {cardMonth && cardMonth.trim() ? cardMonth : "00"}/
+                  {cardYear && cardYear.trim() ? cardYear : "00"} */}
                 </p>
               </div>
             </div>
@@ -180,7 +166,7 @@ const CardDetailsPage = () => {
         <div className="card-back position: relative bottom-100 right-70 h-0">
           <img src={cardImage} alt="Image of the Back of a debit card" />
           <p className="w-7.5 text-white position: relative bottom-34 left-87 font-semibold">
-            {cardCvc && cardCvc.trim() ? cardCvc : "000"}
+            {/* {cardCvc && cardCvc.trim() ? cardCvc : "000"} */}
           </p>
         </div>
       </div>
@@ -188,4 +174,4 @@ const CardDetailsPage = () => {
   );
 };
 
-export default CardDetailsPage;
+export default CardDetailsPageWithZod;

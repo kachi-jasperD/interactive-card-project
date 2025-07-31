@@ -4,36 +4,38 @@ import cardFrontImage from "/assets/bg-card-front.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import type { FieldValues } from "react-hook-form";
+import { useState } from "react";
 
-const CardDetailsPage = () => {
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm();
+const CardDetailsPageWithUseState = () => {
+  const [cardHolderName, setCardHolderName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardMonth, setCardMonth] = useState("");
+  const [cardYear, setCardYear] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const cardYear = watch("year", "");
-  const cardMonth = watch("month", "");
-  const cardCvc = watch("cvc", "");
-  const cardHolderName = watch("name", "");
-  const cardNumber = watch("numbers", "");
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const onSubmit = async (data: FieldValues) => {
-    console.log(data);
-    // POST METHOD/ENDPOINT
+    const card = {
+      cardHolderName,
+      cardNumber,
+      cardMonth,
+      cardYear,
+      cardCvc,
+    };
+
+    // setIsSubmitting(true);
+
     fetch("http://localhost:8000/cards", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(card),
     }).then(() => {
       console.log("New card added");
     });
 
-    reset();
+    // setIsSubmitting(false);
   };
 
   return (
@@ -50,89 +52,69 @@ const CardDetailsPage = () => {
 
         {/* Card details form */}
         <main className="col-start-2 col-end-4 h-screen flex justify-center items-center gap-30 ">
-          <form onSubmit={handleSubmit(onSubmit)} action="" method="">
+          <form action="" method="" onSubmit={handleSubmit}>
             <Label className="label">CARDHOLDER NAME</Label>
             <Input
-              {...register("name", {
-                required: "Can't be blank",
-                maxLength: {
-                  value: 40,
-                  message: "Can't be more than 40",
-                },
-              })}
               type="text"
               placeholder="e.g Jane Appleseed"
               className="input"
-              maxLength={40}
+              value={cardHolderName}
+              onChange={(e) => {
+                setCardHolderName(e.target.value);
+              }}
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs">{`${errors.name.message}`}</p>
-            )}
 
             <Label className="label">CARD NUMBER</Label>
             <Input
-              {...register("numbers", {
-                required: "Wrong format, numbers only",
-                maxLength: {
-                  value: 16,
-                  message: "Can't be more than 16",
-                },
-              })}
               type="text"
               placeholder="e.g 1234 5678 9123 0000"
               className="input"
-              maxLength={16}
+              value={cardNumber}
+              onChange={(e) => {
+                setCardNumber(e.target.value);
+              }}
             />
-            {errors.numbers && (
-              <p className="text-red-500 text-xs">{`${errors.numbers.message}`}</p>
-            )}
             <div className="other-details flex gap-10">
               <div className="date">
                 <Label className="label">EXP. DATE (MM/YY)</Label>
                 <div className="date flex gap-4">
                   <Input
-                    {...register("month", {
-                      required: "Can't be blank",
-                    })}
                     type="text"
                     placeholder="MM"
                     className="h-11 w-28"
                     maxLength={2}
+                    value={cardMonth}
+                    onChange={(e) => {
+                      setCardMonth(e.target.value);
+                    }}
                   />
                   <Input
-                    {...register("year", {
-                      required: "Can't be blank",
-                    })}
                     type="text"
                     placeholder="YY"
                     className="h-11 w-28"
                     maxLength={2}
+                    value={cardYear}
+                    onChange={(e) => {
+                      setCardYear(e.target.value);
+                    }}
                   />
                 </div>
-                {errors.month && (
-                  <p className="text-red-500 text-xs">{`${errors.month.message}`}</p>
-                )}
               </div>
               <div className="cvc">
                 <Label className="label">CVC</Label>
                 <Input
-                  {...register("cvc", {
-                    required: "Can't be blank",
-                  })}
                   type="text"
                   placeholder="e.g 123"
                   className="h-11 w-30"
                   maxLength={3}
+                  value={cardCvc}
+                  onChange={(e) => {
+                    setCardCvc(e.target.value);
+                  }}
                 />
-                {errors.cvc && (
-                  <p className="text-red-500 text-xs">{`${errors.cvc.message}`}</p>
-                )}
               </div>
             </div>
-            <Button
-              disabled={isSubmitting}
-              className="submit-btn h-15 text-white bg-[#220930] leading-[2] w-[400px] hover:bg-white hover:border-2 hover:border-[#220930] hover:text-[#220930]"
-            >
+            <Button className="submit-btn h-15 text-white bg-[#220930] leading-[2] w-[400px] hover:bg-white hover:border-2 hover:border-[#220930] hover:text-[#220930]">
               Confirm
             </Button>
           </form>
@@ -166,7 +148,6 @@ const CardDetailsPage = () => {
                     ? cardHolderName.toUpperCase()
                     : "JANE APPLESEED"}
                 </p>
-
                 <p>
                   {cardMonth && cardMonth.trim() ? cardMonth : "00"}/
                   {cardYear && cardYear.trim() ? cardYear : "00"}
@@ -188,4 +169,4 @@ const CardDetailsPage = () => {
   );
 };
 
-export default CardDetailsPage;
+export default CardDetailsPageWithUseState;

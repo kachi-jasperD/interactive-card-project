@@ -1,6 +1,6 @@
 import CardDetailsPage from "./pages/CardDetailsPage.tsx";
-import "./app.css";
 // import ThankYouPage from "./pages/ThankYouPage.tsx";
+import "./app.css";
 
 function App() {
   return (
