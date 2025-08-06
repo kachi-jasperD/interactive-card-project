@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
+import { useNavigate } from "@tanstack/react-router";
 
 const CardDetailsPage = () => {
   const {
@@ -22,8 +23,9 @@ const CardDetailsPage = () => {
   const cardHolderName = watch("name", "");
   const cardNumber = watch("numbers", "");
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data: FieldValues) => {
-    console.log(data);
     // POST METHOD/ENDPOINT
     fetch("http://localhost:8000/cards", {
       method: "POST",
@@ -33,6 +35,7 @@ const CardDetailsPage = () => {
       console.log("New card added");
     });
 
+    navigate({ to: "/confirmed" });
     reset();
   };
 
@@ -76,6 +79,10 @@ const CardDetailsPage = () => {
                 maxLength: {
                   value: 16,
                   message: "Can't be more than 16",
+                },
+                minLength: {
+                  value: 16,
+                  message: "Can't be less than 16",
                 },
               })}
               type="text"

@@ -3,8 +3,11 @@ import backgroundImage from "/assets/bg-main-desktop.png";
 import cardFrontImage from "/assets/bg-card-front.png";
 import icon from "/assets/icon-complete.svg";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "@tanstack/react-router";
 
 const ThankYouPage = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="grid grid-cols-3 max-h-screen">
@@ -22,7 +25,10 @@ const ThankYouPage = () => {
           <img src={icon} alt="" className="w-16 h-16 object-cover" />
           <h1 className="text-[#120023] text-2xl">THANK YOU!</h1>
           <p className="text-[#bcbcbc]">We've added your card details</p>
-          <Button className="submit-btn h-12 text-white bg-[#220930] leading-[2] w-[400px] hover:bg-white hover:border-2 hover:border-[#220930] hover:text-[#220930]">
+          <Button
+            onClick={() => navigate({ to: "/" })}
+            className="submit-btn h-12 text-white bg-[#220930] leading-[2] w-[400px] hover:bg-white hover:border-2 hover:border-[#220930] hover:text-[#220930]"
+          >
             Continue
           </Button>
         </main>
